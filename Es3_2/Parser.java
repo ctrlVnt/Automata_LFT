@@ -249,12 +249,12 @@ public class Parser {
             expr();
             break;
 
-            // E -> * (E)
+            // E -> * (EL)
 
             case '*':
             match('*');
             match('(');
-            expr();
+            exprlist();
             match(')');
             break;
 
@@ -328,9 +328,9 @@ public class Parser {
 		
     public static void main(String[] args) {
         Lexer lex = new Lexer();
-        String path = "Test.lft";
+        //String path = "Test.lft";
         //String path = "max_tre_num.lft";
-        //String path = "factorial.lft"; //NON FUNZIONA
+        String path = "factorial.lft";
         //String path = "euclid.lft";
         //String path = "esempio_semplice.lft";
         try {
