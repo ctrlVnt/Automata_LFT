@@ -12,28 +12,34 @@ public class Valutatore {
     }
    
     void move() { 
-	// come in Esercizio 3.1
+        look = lex.lexical_scan(pbr);
+        System.out.println("token = " + look);
     }
 
     void error(String s) { 
-	// come in Esercizio 3.1
+        throw new Error("near line " + lex.line + ": " + s);
     }
 
     void match(int t) {
-	// come in Esercizio 3.1
+        if (look.tag == t) {
+            if (look.tag != Tag.EOF) move();
+        } else error("syntax error");
     }
 
     public void start() { 
 	int expr_val;
 
-    	// ... completare ...
-
-    	expr_val = expr();
-	match(Tag.EOF);
-
+    switch(look.tag){
+        case '(':
+        case Tag.NUM:
+        expr_val = expr();
+	    match(Tag.EOF);
         System.out.println(expr_val);
+        break;
 
-	// ... completare ...
+        default:
+        error("error in grammar <start>");
+	    }
     }
 
     private int expr() { 
@@ -75,7 +81,7 @@ public class Valutatore {
 
     public static void main(String[] args) {
         Lexer lex = new Lexer();
-        String path = "...path..."; // il percorso del file da leggere
+        String path = "Test.txt"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Valutatore valutatore = new Valutatore(lex, br);
