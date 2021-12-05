@@ -139,6 +139,8 @@ public class Valutatore {
     
             case Tag.EOF:
             case ')':
+            case '+':
+            case '-':
                 termp_val = termp_i;
                 return termp_val;
     
@@ -163,7 +165,8 @@ public class Valutatore {
             // F -> ID
 
             case Tag.NUM:
-            num_value = look.tag;
+            NumberTok x = (NumberTok)look;
+            num_value = x.number;
             match(Tag.NUM);
             return num_value;
 
