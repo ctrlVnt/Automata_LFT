@@ -30,6 +30,9 @@ public class Valutatore {
 	int expr_val;
 
     switch(look.tag){
+
+        // S -> E
+
         case '(':
         case Tag.NUM:
         expr_val = expr();
@@ -42,41 +45,131 @@ public class Valutatore {
 	    }
     }
 
-    private int expr() { 
+    private int expr(){ 
 	int term_val, exprp_val;
 
-	// ... completare ...
+    switch(look.tag){
+        
+        // E -> TE'
 
-    	term_val = term();
-	exprp_val = exprp(term_val);
-
-	// ... completare ...
-	return exprp_val;
+        case '(':
+        case Tag.NUM:
+            term_val = term();
+	        exprp_val = exprp(term_val);
+            return exprp_val;
+        
+        default:
+            throw new Error("error in grammar <expr>");
+        }
     }
 
     private int exprp(int exprp_i) {
 	int term_val, exprp_val;
+
 	switch (look.tag) {
-	case '+':
+
+         // E' -> +TE'
+
+        case '+':
             match('+');
             term_val = term();
             exprp_val = exprp(exprp_i + term_val);
-            break;
+            return exprp_val;
 
-    	// ... completare ...
-	}
+        // E' -> -TE'
+
+        case '-':
+            match('-');
+            term_val = term();
+            exprp_val = exprp(exprp_i - term_val);
+            return exprp_val;
+
+        // E' -> *vuoto*    
+
+        case Tag.EOF:
+        case ')':
+            exprp_val = exprp_i;
+            return exprp_val;
+
+        default:
+            throw new Error("error in grammar <exprp>");
+        }
     }
 
-    private int term() { 
-	// ... completare ...
+    private int term() {
+    int fact_val, termp_val;
+
+    switch(look.tag){
+        
+        // T -> FT'
+
+        case '(':
+        case Tag.NUM:
+            fact_val = fact();
+            termp_val = termp(fact_val);
+            return termp_val;
+        
+        default:
+            throw new Error("error in grammar <term>");
+        }
     }
     
     private int termp(int termp_i) { 
-	// ... completare ...
+        int fact_val, termp_val;
+
+        switch (look.tag) {
+    
+            // T' -> *FT'
+    
+            case '*':
+                match('*');
+                fact_val = fact();
+                termp_val = termp(termp_i * fact_val);
+                return termp_val;
+    
+            // T' -> /FT'
+    
+            case '/':
+                match('/');
+                fact_val = fact();
+                termp_val = termp(termp_i / fact_val);
+                return termp_val;
+    
+            // T' -> *vuoto*    
+    
+            case Tag.EOF:
+            case ')':
+                termp_val = termp_i;
+                return termp_val;
+    
+            default:
+                throw new Error("error in grammar <termp>");
+            }
     }
     
     private int fact() { 
-	// ... completare ...
+        int expr_val, num_value;
+
+        switch (look.tag) {
+
+            // F -> (E)
+
+            case '(':
+            match('(');
+            expr_val = expr();
+            match(')');
+            return expr_val;
+
+            // F -> ID
+
+            case Tag.NUM:
+            num_value = look.tag;
+            match(Tag.NUM);
+            return num_value;
+
+            default:
+            throw new Error("error in grammar <fact>");
+        }
     }
 
     public static void main(String[] args) {
