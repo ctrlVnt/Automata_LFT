@@ -36,13 +36,7 @@ public class Parser {
     }
 
     private void expr() { // E -> TE'
-        /*if (look.tag == Tag.NUM || look.equals(Token.lpt)){
-            term();
-        }else if (look.equals(Token.plus) || look.equals(Token.minus) || look.tag == Tag.EOF || look.equals(Token.rpt)){
-            exprp();
-        }else{
-            error("error in grammar <expr>");
-        }*/
+        
         switch(look.tag){
 
             case '(':
@@ -84,13 +78,7 @@ public class Parser {
     }
 
     private void term() { // T -> FT'
-        /*if (look.tag == Tag.NUM || look.equals(Token.lpt)){
-            fact();
-        }else if (look.equals(Token.mult) || look.equals(Token.div) || look.tag == Tag.EOF || look.equals(Token.rpt)){
-            termp();
-        }else{
-            error("error in grammar <term>");
-        }*/
+        
         switch(look.tag){
 
             case '(':
