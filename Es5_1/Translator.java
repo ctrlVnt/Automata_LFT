@@ -143,11 +143,12 @@ public class Translator {
                 match(Tag.IF);
                 match('(');
                 int if_true = code.newLabel();
-                bexpr(if_true, lnext);
+                int if_false = code.newLabel();
+                bexpr(if_true, if_false);
                 match(')');
                 code.emitLabel(if_true);
                 stat(if_true);
-                Fprimo(lnext);
+                Fprimo(if_false);
                 break;
 
             case '{':
