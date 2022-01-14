@@ -99,7 +99,7 @@ public class Translator {
 
         switch(look.tag) {
 	
-            case Tag.READ: /*sembra ok*/
+            case Tag.READ:
                 code.emit(OpCode.invokestatic, 0);
                 ioOp = 1;
                 match(Tag.READ);
@@ -108,7 +108,7 @@ public class Translator {
                 match(')');
                 break;
 
-            case Tag.PRINT: /*sembra ok*/
+            case Tag.PRINT:
                 match(Tag.PRINT);
                 match('(');
 	            exprlist('n');
@@ -116,7 +116,7 @@ public class Translator {
                 match(')');
                 break;
 
-            case Tag.ASSIGN: /*sembra ok*/
+            case Tag.ASSIGN:
                 ioOp = 0;
                 match(Tag.ASSIGN);
                 expr();
@@ -124,7 +124,7 @@ public class Translator {
                 idlist(ioOp);
                 break;
 
-            case Tag.WHILE: /*sembra ok*/
+            case Tag.WHILE:
 				int btrue = code.newLabel();
                 match(Tag.WHILE);
                 match('(');
@@ -139,7 +139,7 @@ public class Translator {
                 code.emitLabel(while_false);
                 break;
 
-            case Tag.IF: /*sembra ok*/
+            case Tag.IF:
                 match(Tag.IF);
                 match('(');
                 int if_true = code.newLabel();
@@ -263,7 +263,7 @@ public class Translator {
                     opCode = OpCode.if_icmpge;
                     break;
                 default:
-                    error("AAAAAAAAAAAAAAAAAA");
+                    error("error in Tag.RELOP");
             }
             match(Tag.RELOP);
             expr();
@@ -271,22 +271,6 @@ public class Translator {
             code.emit(opCode, case_true);
             code.emit(OpCode.GOto, case_false);
             break;
-            
-            /*case Tag.AND:
-                int and_true = code.newLabel();
-                match(Tag.AND);
-                bexpr(and_true, case_false);
-                code.emitLabel(and_true);
-                bexpr(case_true, case_false);
-                break;
-
-            case Tag.OR:
-                int or_false = code.newLabel();
-                match(Tag.OR);
-                bexpr(case_true, or_false);
-                code.emitLabel(or_false);
-                bexpr(case_true, case_false);
-                break;*/
 
             default:
                 error("error in grammar <bexpr>");
@@ -400,10 +384,6 @@ public class Translator {
     public static void main(String[] args) {
         Lexer lex = new Lexer();
         String path = "test.lft";
-        //String path = "max_tre_num.lft";
-        //String path = "factorial.lft";
-        //String path = "euclid.lft";
-        //String path = "esempio_semplice.lft";
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Translator traduttore = new Translator(lex, br);
