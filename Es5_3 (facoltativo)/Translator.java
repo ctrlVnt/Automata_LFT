@@ -128,27 +128,23 @@ public class Translator {
 				int btrue = code.newLabel();
                 match(Tag.WHILE);
                 match('(');
-                int while_true = code.newLabel();
-                int while_false = lnext;
+                int while_= code.newLabel();
                 code.emitLabel(btrue);
-                bexpr(while_true, while_false);
-                code.emitLabel(while_true);
+                bexpr(while_);
                 match(')');
                 stat(lnext);
                 code.emit(OpCode.GOto, btrue);
-                code.emitLabel(while_false);
+                code.emitLabel(while_);
                 break;
 
             case Tag.IF:
                 match(Tag.IF);
                 match('(');
-                int if_true = code.newLabel();
-                int if_false = code.newLabel();
-                bexpr(if_true, if_false);
+                int if_ = code.newLabel();
+                bexpr(if_);
                 match(')');
-                code.emitLabel(if_true);
-                stat(if_true);
-                Fprimo(if_false);
+                stat(if_);
+                Fprimo(if_);
                 break;
 
             case '{':
@@ -171,13 +167,13 @@ public class Translator {
             break;
 
             case Tag.ELSE:
-            int jump = code.newLabel();
-            code.emit(OpCode.GOto, jump);;
+            int case_else = code.newLabel();
+            code.emit(OpCode.GOto, case_else);
             code.emitLabel(lnext);
             match(Tag.ELSE);
             stat(lnext);
             match(Tag.END);
-            code.emitLabel(jump);
+            code.emitLabel(case_else);
             break;
 
             default:
@@ -236,7 +232,7 @@ public class Translator {
         }
     }
 
-    private void bexpr(int case_true, int case_false) {
+    private void bexpr(int case_true) {
 
         OpCode opCode = OpCode.if_icmpeq;
         
@@ -245,22 +241,22 @@ public class Translator {
             case Tag.RELOP:
             switch (((Word) look).lexeme) {
                 case "==":
-                    opCode = OpCode.if_icmpeq;
-                    break;
-                case "<":
-                    opCode = OpCode.if_icmplt;
-                    break;
-                case "<=":
-                    opCode = OpCode.if_icmple;
-                    break;
-                case "<>":
                     opCode = OpCode.if_icmpne;
                     break;
-                case ">":
+                case "<":
+                    opCode = OpCode.if_icmpge;
+                    break;
+                case "<=":
                     opCode = OpCode.if_icmpgt;
                     break;
+                case "<>":
+                    opCode = OpCode.if_icmpeq;
+                    break;
+                case ">":
+                    opCode = OpCode.if_icmple;
+                    break;
                 case ">=":
-                    opCode = OpCode.if_icmpge;
+                    opCode = OpCode.if_icmplt;
                     break;
                 default:
                     error("error in Tag.RELOP");
@@ -269,7 +265,6 @@ public class Translator {
             expr();
             expr();
             code.emit(opCode, case_true);
-            code.emit(OpCode.GOto, case_false);
             break;            
 
             default:

@@ -1,6 +1,9 @@
-read(x,y,z);
-if (> x y)
-	if (> x z) print(x) else print(z) end
-else
-	if (> y z) print(y) else print(z) end
-end
+assign 10 to a,b;
+print(a,b);
+read(x,y);
+print(1,+(2,3,4));
+if (> x y) print(x) else print(y) end;
+while (> x 0) {
+	assign - x 1 to x;
+	print(x)
+}

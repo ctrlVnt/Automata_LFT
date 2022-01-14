@@ -52,27 +52,21 @@
  invokestatic Output/print(I)V
  iload 2
  iload 3
- if_icmpgt L5
-L5:
+ if_icmple L5
  iload 2
  invokestatic Output/print(I)V
- goto L7
-L6:
- iload 3
- invokestatic Output/print(I)V
+L5:
 L7:
-L9:
  iload 2
  ldc 0
- if_icmpgt L10
-L10:
+ if_icmple L8
  iload 2
  ldc 1
  isub 
  istore 2
  iload 2
  invokestatic Output/print(I)V
- goto L9
+ goto L7
 L8:
 L0:
  return
