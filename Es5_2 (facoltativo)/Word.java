@@ -28,6 +28,5 @@ public class Word extends Token {
 	eq = new Word(Tag.RELOP, "=="),
 	le = new Word(Tag.RELOP, "<="),
 	ne = new Word(Tag.RELOP, "<>"),
-	ge = new Word(Tag.RELOP, ">="),
-	not = new Word(Tag.NOT, "!");
+	ge = new Word(Tag.RELOP, ">=");
 }
