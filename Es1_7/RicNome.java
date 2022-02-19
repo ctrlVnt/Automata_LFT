@@ -13,46 +13,53 @@ public class RicNome{
                     state = 1;
                 else
                     state = 8;
+                break;
 
                 case 1:
                 if (ch == 'i')
                     state = 2;
                 else
                     state = 9;
+                break;
 
                 case 2:
                 if (ch == 'c')
                     state = 3;
                 else
                     state = 10;
-                
+                break;
 
                 case 3:
                 if (ch == 'c')
                     state = 4;
                 else
                     state = 11;
+                break;
 
                 case 4:
                 if (ch == 'a')
                     state = 5;
                 else
                     state = 12;
+                break;
 
                 case 5:
                 if (ch == 'r')
                     state = 6;
                 else
                     state = 13;
+                break;
 
                 case 6:
                 if (ch == 'd')
                     state = 7;
                 else
                     state = 14;
+                break;
 
                 case 7:
                 state = 20;
+                break;
 
                 case 8:
                 if (ch == 'i')
@@ -102,6 +109,11 @@ public class RicNome{
                 else
                     state = -1;
                 break;
+
+                case 20:
+                state = -1;
+                break;
+
             }
         }
         return state == 20;

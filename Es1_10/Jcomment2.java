@@ -8,7 +8,7 @@ public class Jcomment2{
 
             switch(state){
                 case 0:
-                if (ch == '\\')
+                if (ch == '/')
                     state = 1;
                 else if (ch == 'a' || ch == '*')
                     state = 0;
@@ -21,7 +21,7 @@ public class Jcomment2{
                     state = 2;
                 else if (ch == 'a')
                     state = 0;
-                else if (ch == '\\')
+                else if (ch == '/')
                     state = 1;
                 else
                     state = -1;
@@ -30,7 +30,7 @@ public class Jcomment2{
                 case 2:
                 if (ch == '*')
                     state = 3;
-                else if (ch == 'a' || ch == '\\')
+                else if (ch == 'a' || ch == '/')
                     state = 4;
                 else
                     state = -1;
@@ -41,14 +41,14 @@ public class Jcomment2{
                     state = 3;
                 else if (ch == 'a')
                     state = 4;
-                else if (ch == '\\')
+                else if (ch == '/')
                     state = 5;
                 else
                     state = -1;
                 break;
 
                 case 4:
-                if (ch == 'a' || ch == '\\')
+                if (ch == 'a' || ch == '/')
                     state = 4;
                 else if (ch == '*')
                     state = 3;
@@ -59,7 +59,7 @@ public class Jcomment2{
                 case 5:
                 if (ch == 'a' || ch == '*')
                     state = 5;
-                else if (ch == '\\')
+                else if (ch == '/')
                     state = 1;
                 else
                     state = -1;

@@ -1,5 +1,5 @@
 import java.io.*; 
-//import java.util.*;
+import java.util.*;
 
 public class Lexer {
 
@@ -71,8 +71,7 @@ public class Lexer {
                     peek = ' ';
                     return Word.and;
                 } else {
-                    System.err.println("Erroneous character"
-                            + " after & : "  + peek );
+                    System.err.println("Erroneous character" + " after & : "  + peek );
                     return null;
                 }
 

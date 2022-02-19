@@ -26,7 +26,10 @@ public class Parser {
         } else error("syntax error");
     }
 
-    public void prog() { // P -> SL $
+    public void prog() { 
+        
+        // P -> SL $
+        
         switch(look.tag){
             case Tag.ASSIGN:
             case Tag.PRINT:

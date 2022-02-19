@@ -112,13 +112,11 @@ public class Parser {
             // T' -> *vuoto*
             case Tag.EOF:
             case ')':
+            case '+':
+            case '-':
             break;
 
             default:
-            if (look.tag == '+' || look.tag == '-'){ // TOPPA ILLEGALE
-                exprp();
-                break;
-            }
             error("error in grammar <termp>");
         }
     }

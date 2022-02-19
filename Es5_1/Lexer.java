@@ -1,5 +1,5 @@
 import java.io.*; 
-//import java.util.*;
+import java.util.*;
 
 public class Lexer {
 
@@ -15,9 +15,67 @@ public class Lexer {
     }
 
     public Token lexical_scan(BufferedReader br) {
-        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
-            if (peek == '\n') line++;
-            readch(br);
+        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r' || peek == '/') {
+
+            if (peek == '\n'){
+                line++;
+            }
+            
+            if(peek == '/'){
+                readch(br);
+                if(peek == '/'){
+                    readch(br);
+                    while(peek != '\n' && peek != (char) -1){
+                        readch(br);
+                    }
+                    line++;
+                }else if (peek == '*'){
+
+                    int stat = 0;
+                    while (stat != 3){
+
+                        switch(stat){
+
+                            case 0:
+                            readch(br);
+                            if (peek == '*')
+                                stat = 1;
+                            else if (peek != '*')
+                                stat = 0;
+                            else if (peek == (char) -1){
+                                System.err.println("Error, comment not close");
+                                return null;
+                            }
+                            break;
+            
+                            case 1:
+                            readch(br);
+                            if (peek == '*')
+                                stat = 1;
+                            else if (peek == '/')
+                                stat = 2;
+                            else if (peek != '*')
+                                stat = 0;
+                            else if (peek == (char) -1){
+                                System.err.println("Error, comment not close");
+                                return null;
+                            }
+                            break;
+
+                            case 2:
+                            readch(br);
+                            if (peek == '\n')
+                                readch(br);
+                            stat = 3;
+                            break;
+                        }
+                    }
+                }else{
+                    return Token.div;
+                }
+            }else{
+                readch(br);
+            }
         }
         
         switch (peek) {
@@ -56,7 +114,7 @@ public class Lexer {
             case '/':
                 peek = ' ';
                 return Token.div;
-            
+                            
             case ';':
                 peek = ' ';
                 return Token.semicolon;
@@ -71,8 +129,7 @@ public class Lexer {
                     peek = ' ';
                     return Word.and;
                 } else {
-                    System.err.println("Erroneous character"
-                            + " after & : "  + peek );
+                    System.err.println("Erroneous character" + " after & : "  + peek );
                     return null;
                 }
 
@@ -121,12 +178,21 @@ public class Lexer {
 
             default:
 
-                if (Character.isLetter(peek)) {
+                if (Character.isLetter(peek) || peek == '_') {
                 String a = "";
-                while (Character.isLetterOrDigit(peek)){
+                int n = 0;
+                while (Character.isLetterOrDigit(peek)|| peek == '_'){
+                    if (peek != '_')
+                        n += 1; /*lo uso per sapere se ho avuto solo underscore*/
                     a+=peek;
                     readch(br);
                 }
+
+                if (n == 0){
+                    System.err.println("Erroneous variable: " + a );
+                    return null;
+                }
+
                 switch (a){
                 case "assign":
                     return Word.assign;
@@ -159,13 +225,13 @@ public class Lexer {
                     return new Word(Tag.ID, a);
                 }
                 
-                } else if (Character.isDigit(peek)) { //trovare il modo di farlo senza cast, moltiplicando x19 caratteri successivi
+                } else if (Character.isDigit(peek)) { /*si potrebbe anche fare senza cast, moltiplicando x10 caratteri successivi*/
                     String b = "";
                     while (Character.isDigit(peek)){
                         b += peek;
                         readch(br);
-                        if (Character.isLetter(peek)){
-                            System.err.println("Erroneous character: " + peek );
+                        if (Character.isLetter(peek) || peek == '_'){
+                            System.err.println("Erroneous character into number string: " + peek );
                             return null;
                         }
                     }
@@ -177,7 +243,7 @@ public class Lexer {
                 }
          }
     }
-
+		
     public static void main(String[] args) {
         Lexer lex = new Lexer();
         String path = "Test.txt"; // il percorso del file da leggere

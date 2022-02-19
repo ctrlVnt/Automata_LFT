@@ -48,6 +48,7 @@ public class Jcomment{
         }
         return state == 4;
     }
+    
     public static void main(String[]args){
         System.out.println(scan(args[0]) ? "OK" : "NOPE");
     }

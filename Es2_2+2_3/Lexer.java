@@ -1,5 +1,5 @@
 import java.io.*; 
-//import java.util.*;
+import java.util.*;
 
 public class Lexer {
 
@@ -15,26 +15,32 @@ public class Lexer {
     }
 
     public Token lexical_scan(BufferedReader br) {
-        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
-            if (peek == '\n') line++;
-            readch(br);
-        }
-        
-        if (peek == '/'){
-            readch(br);
-                if (peek == '/'){
-                    while (peek != (char) -1 && peek != '\n'){
+        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r' || peek == '/') {
+
+            if (peek == '\n'){
+                line++;
+            }
+            
+            if(peek == '/'){
+                readch(br);
+                if(peek == '/'){
+                    readch(br);
+                    while(peek != '\n' && peek != (char) -1){
                         readch(br);
-                    }readch(br);
+                    }
+                    line++;
                 }else if (peek == '*'){
+
                     int stat = 0;
                     while (stat != 3){
+
                         switch(stat){
+
                             case 0:
                             readch(br);
                             if (peek == '*')
                                 stat = 1;
-                            else if (Character.isLetterOrDigit(peek) || Character.isJavaIdentifierStart(peek))
+                            else if (peek != '*')
                                 stat = 0;
                             else if (peek == (char) -1){
                                 System.err.println("Error, comment not close");
@@ -46,10 +52,10 @@ public class Lexer {
                             readch(br);
                             if (peek == '*')
                                 stat = 1;
-                            else if (Character.isLetterOrDigit(peek) || Character.isJavaIdentifierStart(peek))
-                                stat = 0;
                             else if (peek == '/')
                                 stat = 2;
+                            else if (peek != '*')
+                                stat = 0;
                             else if (peek == (char) -1){
                                 System.err.println("Error, comment not close");
                                 return null;
@@ -65,12 +71,12 @@ public class Lexer {
                         }
                     }
                 }else{
-                    peek = ' ';
                     return Token.div;
                 }
+            }else{
+                readch(br);
             }
-            
-
+        }
         
         switch (peek) {
             case '!':
@@ -177,7 +183,7 @@ public class Lexer {
                 int n = 0;
                 while (Character.isLetterOrDigit(peek)|| peek == '_'){
                     if (peek != '_')
-                        n += 1;
+                        n += 1; /*lo uso per sapere se ho avuto solo underscore*/
                     a+=peek;
                     readch(br);
                 }
@@ -219,7 +225,7 @@ public class Lexer {
                     return new Word(Tag.ID, a);
                 }
                 
-                } else if (Character.isDigit(peek)) { //trovare il modo di farlo senza cast, moltiplicando x10 caratteri successivi
+                } else if (Character.isDigit(peek)) { /*si potrebbe anche fare senza cast, moltiplicando x10 caratteri successivi*/
                     String b = "";
                     while (Character.isDigit(peek)){
                         b += peek;

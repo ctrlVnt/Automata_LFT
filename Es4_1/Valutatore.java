@@ -37,7 +37,7 @@ public class Valutatore {
         case Tag.NUM:
         expr_val = expr();
 	    match(Tag.EOF);
-        System.out.println(expr_val);
+        System.out.println(expr_val); // print(exprp.val)
         break;
 
         default:
@@ -46,7 +46,7 @@ public class Valutatore {
     }
 
     private int expr(){ 
-	int term_val, exprp_val;
+	int term_val, expr_val;
 
     switch(look.tag){
         
@@ -54,9 +54,9 @@ public class Valutatore {
 
         case '(':
         case Tag.NUM:
-            term_val = term();
-	        exprp_val = exprp(term_val);
-            return exprp_val;
+            term_val = term(); //expr.i = term.val
+	        expr_val = exprp(term_val); //expr.val = exprp.val
+            return expr_val;
         
         default:
             throw new Error("error in grammar <expr>");
@@ -72,23 +72,23 @@ public class Valutatore {
 
         case '+':
             match('+');
-            term_val = term();
-            exprp_val = exprp(exprp_i + term_val);
+            term_val = term(); //exprp1.i = exprp.i + term.val
+            exprp_val = exprp(exprp_i + term_val); // exprp.val = exprp1.val
             return exprp_val;
 
         // E' -> -TE'
 
         case '-':
             match('-');
-            term_val = term();
-            exprp_val = exprp(exprp_i - term_val);
+            term_val = term(); //exprp1.i = exprp.i + term.val
+            exprp_val = exprp(exprp_i - term_val); // exprp.val = exprp1.val
             return exprp_val;
 
         // E' -> *vuoto*    
 
         case Tag.EOF:
         case ')':
-            exprp_val = exprp_i;
+            exprp_val = exprp_i; //exprp_val = exprp_i
             return exprp_val;
 
         default:
@@ -105,8 +105,8 @@ public class Valutatore {
 
         case '(':
         case Tag.NUM:
-            fact_val = fact();
-            termp_val = termp(fact_val);
+            fact_val = fact(); //termp.i = fact.val
+            termp_val = termp(fact_val); //term.val = termp.val
             return termp_val;
         
         default:
@@ -123,16 +123,16 @@ public class Valutatore {
     
             case '*':
                 match('*');
-                fact_val = fact();
-                termp_val = termp(termp_i * fact_val);
+                fact_val = fact(); //termp1.i = termp.i * fact.val
+                termp_val = termp(termp_i * fact_val); //termp.val = termp1.val
                 return termp_val;
     
             // T' -> /FT'
     
             case '/':
                 match('/');
-                fact_val = fact();
-                termp_val = termp(termp_i / fact_val);
+                fact_val = fact(); //termp1.i = termp.i / fact.val
+                termp_val = termp(termp_i / fact_val); //termp.val = termp1.val
                 return termp_val;
     
             // T' -> *vuoto*    
@@ -141,7 +141,7 @@ public class Valutatore {
             case ')':
             case '+':
             case '-':
-                termp_val = termp_i;
+                termp_val = termp_i; //termp.val = termp.i
                 return termp_val;
     
             default:
@@ -158,7 +158,7 @@ public class Valutatore {
 
             case '(':
             match('(');
-            expr_val = expr();
+            expr_val = expr(); //fact.val = expr.val
             match(')');
             return expr_val;
 
@@ -166,7 +166,7 @@ public class Valutatore {
 
             case Tag.NUM:
             NumberTok x = (NumberTok)look;
-            num_value = x.number;
+            num_value = x.number; //fact.val = NUM.value
             match(Tag.NUM);
             return num_value;
 
